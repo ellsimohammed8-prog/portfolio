@@ -2,8 +2,6 @@
 import { ImageResponse } from "next/og";
 import { DATA } from "@/data/resume";
 
-export const runtime = "edge";
-
 export const alt = "Blog";
 export const size = {
     width: 1200,
