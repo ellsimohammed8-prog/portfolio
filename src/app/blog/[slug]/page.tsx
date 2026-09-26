@@ -30,8 +30,12 @@ export async function generateMetadata({
     slug: string;
   }>;
 }): Promise<Metadata | undefined> {
-  const { slug } = await params;
-  const post = allPosts.find((p) => p._meta.path.replace(/\.mdx$/, "") === slug);
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+  if (!slug) {
+    return undefined;
+  }
+  const post = allPosts.find((p) => p._meta?.path?.replace(/\.mdx$/, "") === slug);
 
   if (!post) {
     return undefined;
@@ -79,11 +83,22 @@ export default async function Blog({
     slug: string;
   }>;
 }) {
-  const { slug } = await params;
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
+
+  if (!slug) {
+    notFound();
+  }
+
   const sortedPosts = getSortedPosts();
   const currentIndex = sortedPosts.findIndex(
-    (p) => p._meta.path.replace(/\.mdx$/, "") === slug
+    (p) => p._meta?.path?.replace(/\.mdx$/, "") === slug
   );
+
+  if (currentIndex === -1) {
+    notFound();
+  }
+
   const post = sortedPosts[currentIndex];
 
   if (!post) {

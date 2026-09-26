@@ -2,37 +2,163 @@
 title: "Git Workflow Guide: From Chaos to Clarity"
 publishedAt: "2024-12-10"
 updatedAt: "2024-12-10"
-author: "John Doe"
-summary: "Master Git workflows that keep your team productive and your codebase healthy."
+author: "Mohammed Guejjim"
+summary: "A practical guide to structuring Git workflows for modern engineering teams: comparing Trunk-Based Development vs. GitFlow, Conventional Commits, interactive rebasing, merge strategies, and conflict resolution."
 image: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=800&h=192&fit=crop"
 ---
 
 # Git Workflow Guide: From Chaos to Clarity
 
-Git is powerful, but teams usually struggle because they don’t agree on a few basics. A simple workflow keeps history readable, reviews focused, and releases less stressful.
+Git is the fundamental communication and synchronization protocol of modern software development. Yet, without clear team conventions, commit histories easily deteriorate into cryptic one-liners, massive multi-week branches, and terrifying merge conflicts.
 
-This is a lightweight guide you can adopt in a day and iterate on later.
+This guide details professional Git practices that provide clarity, accelerate continuous integration, and keep pull requests small and focused.
 
-## A simple team workflow
+---
 
-- Branch from `main` for every change.
-- Keep branches small and short-lived.
-- Open a pull request early and ask for review.
-- Merge back to `main` once tests pass.
+## 1. Workflow Architecture: Trunk-Based Development vs. GitFlow
 
-## Commit message tips
+Choosing the right branching strategy dictates how quickly your team can ship value:
 
-- Start with a clear verb (“add”, “fix”, “remove”, “refactor”).
-- Keep the first line short and specific.
-- Prefer multiple small commits over one giant “WIP”.
+```
+Trunk-Based Development (Recommended for Modern CI/CD):
+-----------------------------------------------------------
+main   ----●--------●---------●---------●--------> [Always deployable]
+            \      /         /         /
+feature      ●----●         ●---------●   [Short-lived: 1-2 days max]
+```
 
-## PR checklist
+### Trunk-Based Development (TBD)
+- Developers create short-lived feature branches originating from `main`.
+- Branches typically live for less than 48 hours before merging via small, reviewed Pull Requests.
+- Feature flags decouple deployment from release, allowing incomplete features to merge safely into `main`.
+- **Best for:** Fast-moving SaaS teams, automated CI/CD pipelines, and microservices.
 
-1. Explain what changed and why.
-2. Link the issue or describe the user impact.
-3. Add tests (or explain why not).
-4. Keep the diff small enough to review quickly.
+### GitFlow
+- Involves persistent branches: `main` (production), `develop` (staging), `release/*`, and `hotfix/*`.
+- Introduces substantial overhead with synchronization merges between `develop` and `main`.
+- **Best for:** Traditional desktop applications, mobile app store releases with rigid release windows, or regulated software.
 
-## Wrap-up
+---
 
-The goal isn’t “perfect Git” — it’s fewer surprises and faster collaboration. Start simple, write down the rules, and improve them as your team grows.
+## 2. Meaningful Commits: The Conventional Commits Standard
+
+Adopt the [Conventional Commits specification](https://www.conventionalcommits.org/) to create human-readable and machine-parseable commit histories that automate changelogs and semantic versioning:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Primary Commit Types
+
+| Type | Purpose | Example |
+| :--- | :--- | :--- |
+| `feat` | New user-facing functionality | `feat(auth): add OAuth2 GitHub sign-in support` |
+| `fix` | Bug fix in production code | `fix(cart): prevent race condition on checkout submit` |
+| `refactor` | Code change that neither fixes a bug nor adds a feature | `refactor(db): migrate raw SQL queries to Prisma client` |
+| `perf` | Performance optimization | `perf(images): enable WebP conversion in Next.js pipeline` |
+| `docs` | Documentation only updates | `docs(readme): update local development setup steps` |
+| `test` | Adding or correcting test suites | `test(user-form): add test case for validation failure` |
+| `chore` | Build tools, dependency bumps, linting configs | `chore(deps): upgrade Next.js to v16.1.1` |
+
+### Breaking Changes Notification
+
+Signal breaking API changes with an exclamation mark before the colon:
+
+```text
+feat(api)!: drop legacy v1 authentication tokens
+
+BREAKING CHANGE: Authorization header now strictly requires Bearer prefix.
+```
+
+---
+
+## 3. Mastering Interactive Rebasing (`git rebase -i`)
+
+Before pushing a branch for review, clean up your scratchpad commits (e.g. "wip", "fixed typo", "temp") into atomic, well-reasoned commits:
+
+```bash title="terminal"
+# Rebase the last 4 commits on your current branch
+git rebase -i HEAD~4
+```
+
+An editor opens with interactive commands:
+
+```text
+pick e4a812b feat(profile): create user avatar component
+s 93f412a fix typo in avatar border styling
+s b104391 remove console.log from avatar upload
+pick 71c8901 test(profile): add unit tests for avatar fallback
+```
+
+Key Rebase Commands:
+- `pick`: Use the commit as is.
+- `squash` (or `s`): Meld commit into previous commit and combine commit messages.
+- `fixup` (or `f`): Meld commit into previous commit, discarding the fixup commit message.
+- `reword` (or `r`): Edit the commit message.
+- `drop` (or `d`): Delete the commit entirely.
+
+---
+
+## 4. Merge Strategies: Merge Commit vs. Squash vs. Rebase
+
+```
+1. Merge Commit (--no-ff)
+   Preserves branch topology and commit history exactly as recorded.
+   Useful for long audit trails, but clutters main history with merge nodes.
+
+2. Squash and Merge
+   Collapses all commits on the PR into a single clean commit on main.
+   Keeps main linear and makes `git revert` simple. Recommended for GitHub PRs.
+
+3. Rebase and Merge
+   Replays commits individually onto main without merge commits.
+   Maintains a linear history, but requires individual commits to be clean beforehand.
+```
+
+---
+
+## 5. Resolving Merge Conflicts Systematically
+
+When multiple developers modify adjacent code blocks, Git halts execution and inserts conflict markers:
+
+```typescript title="src/lib/constants.ts"
+<<<<<<< HEAD (current change on main)
+export const API_TIMEOUT_MS = 15000;
+export const MAX_RETRY_COUNT = 3;
+=======
+export const API_TIMEOUT_MS = 20000;
+export const MAX_RETRY_COUNT = 5;
+export const ENABLE_CIRCUIT_BREAKER = true;
+>>>>>>> feature/telemetry (incoming change)
+```
+
+### Steps to Resolve Cleanly:
+
+1. **Pull the latest `main`**:
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout feature/your-branch
+   git rebase main
+   ```
+2. **Review conflicting files** with `git status`.
+3. Open each file, inspect the logic, combine the intentional changes, and remove all `<<<<<<<`, `=======`, and `>>>>>>>` markers.
+4. **Mark as resolved and continue**:
+   ```bash
+   git add src/lib/constants.ts
+   git rebase --continue
+   ```
+5. If things go wrong at any point, abort safely without losing work:
+   ```bash
+   git rebase --abort
+   ```
+
+---
+
+## Summary
+
+Clean Git histories are not an accident; they are the result of deliberate hygiene. Keep branches short-lived, write declarative commit messages following the Conventional Commits specification, squash transient commits before merging, and treat your Git log as living architectural documentation.

@@ -2,32 +2,179 @@
 title: "REST API Design Principles That Stand the Test of Time"
 publishedAt: "2024-12-12"
 updatedAt: "2024-12-12"
-author: "John Doe"
-summary: "Learn how to design APIs that developers love to use and are easy to maintain."
+author: "Mohammed Guejjim"
+summary: "A battle-tested blueprint for designing robust REST APIs: resource modeling, semantic HTTP verbs, idempotent operations, pagination, filtering, versioning, and RFC-compliant error structures."
 image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=192&fit=crop"
 ---
 
 # REST API Design Principles That Stand the Test of Time
 
-Great APIs feel boring in the best way: predictable, consistent, and easy to reason about. When the surface area is simple, teams ship faster and clients break less often.
+APIs are contracts between systems. Once an API is published and integrated by multiple web clients, mobile apps, or third-party consumers, changing it becomes remarkably expensive. 
 
-This is a lightweight checklist you can keep in mind while designing new endpoints or reviewing an existing API.
+Great APIs feel intuitively simple, predictable, and resilient. This architectural guide covers core principles for designing RESTful APIs that remain clean and maintainable as your backend scales.
 
-## Core principles
+---
 
-- Use clear, consistent **resource names** (think nouns).
-- Keep behavior aligned with **HTTP semantics** (read vs write).
-- Return **consistent response shapes** so clients don’t guess.
-- Prefer **sane defaults** with optional query parameters for filtering/sorting.
+## 1. Resource Modeling: Nouns, Not Verbs
 
-## A simple checklist
+REST is centered around **resources** rather than RPC actions. Your URL paths should represent entities (nouns) in plural form, while the HTTP method defines the action to perform.
 
-1. Pick stable resource paths (plural nouns are a common convention).
-2. Use a small set of status codes consistently.
-3. Document pagination and what “next/previous” means.
-4. Be explicit about authentication and authorization requirements.
-5. Add brief examples in docs for the “happy path” and common errors.
+```
+Good URLs (Resource-oriented):
+GET    /api/v1/projects
+POST   /api/v1/projects
+GET    /api/v1/projects/:id
+PATCH  /api/v1/projects/:id
+DELETE /api/v1/projects/:id
+GET    /api/v1/projects/:id/tasks
 
-## Wrap-up
+Bad URLs (RPC-style verbs in URL):
+POST   /api/v1/getAllProjects
+POST   /api/v1/createNewProject
+GET    /api/v1/deleteProject?id=12
+```
 
-If you optimize for consistency first, your API will be easier to document, easier to test, and easier for others to adopt.
+### Handling Non-CRUD Actions
+
+For business processes that do not map directly to CRUD (such as deploying a model, resending an invitation, or triggering an invoice run), treat the operation as a subordinate resource or state transition:
+
+```http
+POST /api/v1/deployments/:id/cancellations
+POST /api/v1/invoices/:id/payments
+POST /api/v1/auth/password-resets
+```
+
+---
+
+## 2. Semantic HTTP Verbs and Idempotency
+
+Understanding idempotency guarantees prevents subtle race conditions, duplicate billing, and erratic retry behaviors:
+
+| Method | Purpose | Idempotent | Safe | Typical Response Code |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | Read resource | Yes | Yes | `200 OK` |
+| `POST` | Create subordinate resource / action | **No** | No | `201 Created` with `Location` header |
+| `PUT` | Replace entire resource | Yes | No | `200 OK` or `204 No Content` |
+| `PATCH` | Partial resource update | Yes* | No | `200 OK` |
+| `DELETE` | Remove resource | Yes | No | `204 No Content` or `200 OK` |
+
+> *A PATCH request is idempotent when assigning fixed values (e.g., `{ "status": "active" }`), but non-idempotent if performing relative increments (e.g., `{ "$inc": { "views": 1 } }`).
+
+---
+
+## 3. Standard HTTP Status Codes
+
+Avoid the antipattern of returning `200 OK` with `{ "error": "Unauthorized" }` inside the JSON payload. Always leverage standard HTTP status codes:
+
+- **2xx Success**:
+  - `200 OK`: Request succeeded with payload.
+  - `201 Created`: Resource successfully created (include `Location: /api/v1/resources/:id`).
+  - `204 No Content`: Successful execution with no body (ideal for `DELETE` or empty `PUT`).
+- **4xx Client Errors**:
+  - `400 Bad Request`: Validation failure or malformed JSON syntax.
+  - `401 Unauthorized`: Authentication missing or invalid bearer token.
+  - `403 Forbidden`: Authenticated user lacks permission to access resource.
+  - `404 Not Found`: Target resource does not exist.
+  - `409 Conflict`: Unique constraint violation (e.g. email already registered).
+  - `422 Unprocessable Content`: Semantically invalid data.
+  - `429 Too Many Requests`: Rate limit exceeded (send `Retry-After` header).
+- **5xx Server Errors**:
+  - `500 Internal Server Error`: Unexpected unhandled exception.
+  - `503 Service Unavailable`: Maintenance or downstream dependency outage.
+
+---
+
+## 4. Standardized Error Payload (RFC 7807 / RFC 9457)
+
+Client libraries benefit immensely from a consistent, machine-readable error format. Adopting the Problem Details for HTTP APIs standard provides structure:
+
+```json title="Error Response (422 Unprocessable Content)"
+{
+  "type": "https://api.portfolio.dev/errors/validation-error",
+  "title": "Validation Failed",
+  "status": 422,
+  "detail": "The payload contains 2 invalid fields.",
+  "instance": "/api/v1/projects",
+  "errors": [
+    {
+      "field": "title",
+      "message": "Title must be between 3 and 100 characters."
+    },
+    {
+      "field": "budget",
+      "message": "Budget must be a positive integer."
+    }
+  ]
+}
+```
+
+---
+
+## 5. Filtering, Sorting, and Pagination
+
+Large datasets must never be returned in an unbounded array. Combine limit-offset or cursor-based pagination with predictable query parameters:
+
+### Cursor-Based Pagination (Recommended for Real-Time & High Volume)
+
+Cursor pagination prevents duplicate or skipped items when records are inserted or deleted during traversal:
+
+```http
+GET /api/v1/telemetry?cursor=eyJpZCI6MTAyOX0&limit=25
+```
+
+```json title="Response"
+{
+  "data": [
+    { "id": "tel_101", "sensor": "co2", "value": 412 },
+    { "id": "tel_102", "sensor": "humidity", "value": 64.2 }
+  ],
+  "pagination": {
+    "hasMore": true,
+    "nextCursor": "eyJpZCI6MTAxfQ",
+    "totalCount": 1420
+  }
+}
+```
+
+### Filtering and Sorting Conventions
+
+```http
+# Filtering by field
+GET /api/v1/projects?status=active&category=ai-agents
+
+# Range queries
+GET /api/v1/metrics?created_after=2024-01-01T00:00:00Z
+
+# Multi-field sorting (- prefix indicates descending)
+GET /api/v1/projects?sort=-created_at,title
+```
+
+---
+
+## 6. Versioning Strategies
+
+Breaking changes are inevitable over multi-year software lifecycles. Choose a versioning strategy that balances clarity and caching:
+
+1. **URI Path Versioning (Recommended)**:
+   ```http
+   GET /api/v1/deployments
+   GET /api/v2/deployments
+   ```
+   *Pros*: Transparent in access logs, simple to route in API gateways (Kong, Envoy, Cloudflare), and easy for developers to test.
+2. **Header Versioning (`Accept` / Custom Header)**:
+   ```http
+   Accept: application/vnd.company.v2+json
+   ```
+   *Pros*: Keeps URLs pristine; *Cons*: Harder to test via standard browser queries and requires careful cache variation (`Vary: Accept`).
+
+---
+
+## Summary Checklist for API Reviews
+
+- [x] Plural nouns for resource endpoints (`/users`, `/projects`, `/devices`)
+- [x] Correct HTTP verb usage (`GET` safe, `PUT`/`DELETE` idempotent)
+- [x] Clean status codes reflecting true results (no 200 with hidden error bodies)
+- [x] Structured RFC-compliant error envelopes
+- [x] Default pagination on all collection endpoints
+- [x] Clear authentication headers (`Authorization: Bearer <token>`)
+- [x] Rate limiting headers included on all responses (`X-RateLimit-Remaining`)

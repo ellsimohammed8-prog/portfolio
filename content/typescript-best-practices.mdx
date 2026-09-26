@@ -2,40 +2,189 @@
 title: "TypeScript Best Practices for Clean, Maintainable Code"
 publishedAt: "2024-12-08"
 updatedAt: "2024-12-08"
-author: "John Doe"
-summary: "Essential TypeScript patterns and practices that will make your codebase more robust and easier to maintain."
+author: "Mohammed Guejjim"
+summary: "Level up your TypeScript codebase with pragmatic design patterns: discriminated unions, generic constraints, unknown vs any, narrowing, and robust compiler configurations."
 image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=192&fit=crop"
 ---
 
 # TypeScript Best Practices for Clean, Maintainable Code
 
-TypeScript shines when it helps you model reality — not when it forces you to fight types all day. A few small defaults can make a codebase feel <mark>calmer, safer, and easier to refactor</mark>.
+TypeScript transforms JavaScript from a loose scripting language into a structured, self-documenting engineering platform. However, many codebases fall into two extremes: either littering code with `any` escapes to bypass the compiler, or crafting overly convoluted generic type gymnastics that confuse colleagues and degrade IDE performance.
 
-<MediaContainer
-  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&fit=crop"
-  alt="TypeScript code on screen"
-/>
+This guide outlines practical, production-proven patterns for writing TypeScript that is concise, expressive, and easily maintainable.
 
-## Practical rules of thumb
+---
 
-- Turn on strictness and fix the sharp edges early.
-- Prefer readable types over clever types.
-- Use unions for “one of these”, interfaces for “shape of this”.
-- Avoid `any` as a shortcut; it becomes ~~future debt~~ fast.
+## 1. Discriminated Unions: Modeling State Without Impossible States
 
-## One pattern worth memorizing
+The most potent modeling tool in TypeScript is the **discriminated union** (also known as tagged union). It pairs a shared literal field (e.g., `status`, `type`) with payload variations.
 
-```ts
-type Result<T> =
-  | { ok: true; value: T }
-  | { ok: false; error: string };
+### The Antipattern: Optional Flag Soup
 
-export function parseNumber(input: string): Result<number> {
-  const n = Number(input);
-  return Number.isFinite(n) ? { ok: true, value: n } : { ok: false, error: "Not a number" };
+```typescript title="Antipattern (Permits Invalid States)"
+// Bad: allows combinations like { isLoading: false, isError: true, data: undefined, error: undefined }
+interface FetchState<T> {
+  isLoading: boolean;
+  isError: boolean;
+  data?: T;
+  error?: Error;
 }
 ```
 
-## Wrap-up
+### The Solution: Discriminated Union
 
-The best TypeScript code reads like good documentation: clear names, predictable shapes, and errors that point you to the fix.
+```typescript title="src/types/state.ts"
+export type AsyncResult<T> =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: Error };
+
+// Consuming with exhaustive pattern matching
+export function renderStatus<T>(result: AsyncResult<T>): string {
+  switch (result.status) {
+    case "idle":
+      return "Waiting to fetch...";
+    case "loading":
+      return "Loading telemetry data...";
+    case "success":
+      return `Loaded payload: ${JSON.stringify(result.data)}`;
+    case "error":
+      return `Error occurred: ${result.error.message}`;
+  }
+}
+```
+
+If you add a new state to `AsyncResult`, TypeScript's compiler will alert you anywhere you haven't handled that case when using exhaustive checks:
+
+```typescript
+function assertNever(x: never): never {
+  throw new Error(`Unexpected object: ${x}`);
+}
+```
+
+---
+
+## 2. Using `unknown` Over `any` for Untyped Boundaries
+
+`any` completely disables the compiler's safety checks and cascades silently through your entire application. By contrast, `unknown` informs TypeScript that a value exists, but forces you to narrow its type before accessing properties:
+
+```typescript title="src/lib/safe-json.ts"
+// Bad: returns any, silencing all future downstream bugs
+function parseData(json: string): any {
+  return JSON.parse(json);
+}
+
+// Good: returns unknown, requiring explicit type narrowing or validation
+export function safeParseJson(json: string): unknown {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+// Validating at runtime with Zod or user-defined type guards
+import { z } from "zod";
+
+const UserSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+});
+
+export type User = z.infer<typeof UserSchema>;
+
+export function parseUser(rawJson: string): User | null {
+  const parsed = safeParseJson(rawJson);
+  const result = UserSchema.safeParse(parsed);
+  return result.success ? result.data : null;
+}
+```
+
+---
+
+## 3. Generics with Practical Constraints
+
+Don't write unbounded generics like `<T>` when you expect specific traits. Constrain generic parameters with `extends`:
+
+```typescript title="src/lib/utils.ts"
+interface EntityWithId {
+  id: string | number;
+}
+
+// Constrained generic ensures item possesses an id property
+export function indexById<T extends EntityWithId>(items: T[]): Record<string, T> {
+  return items.reduce((acc, item) => {
+    acc[String(item.id)] = item;
+    return acc;
+  }, {} as Record<string, T>);
+}
+```
+
+---
+
+## 4. Built-In Utility Types Every Developer Should Master
+
+TypeScript includes powerful built-in utility types that reduce boilerplate:
+
+```typescript title="src/types/dtos.ts"
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  tags: string[];
+  createdAt: Date;
+}
+
+// 1. Pick: Choose specific fields for creation
+export type CreateProjectDto = Pick<Project, "title" | "description" | "budget">;
+
+// 2. Omit: Exclude auto-generated fields
+export type UpdateProjectDto = Partial<Omit<Project, "id" | "createdAt">>;
+
+// 3. Readonly: Immutable configuration models
+export type ProjectConfig = Readonly<Pick<Project, "id" | "tags">>;
+
+// 4. Record: Key-value maps with typed keys
+export type ProjectCategory = "ai" | "iot" | "web";
+export type CategoryTotals = Record<ProjectCategory, number>;
+```
+
+---
+
+## 5. Strict TypeScript Compiler Settings
+
+Ensure your `tsconfig.json` enforces strict safety defaults to catch issues at build time:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler"
+  }
+}
+```
+
+---
+
+## Key Takeaways
+
+1. **Model state with discriminated unions** to make invalid UI states unrepresentable.
+2. **Never type API boundaries as `any`**; type them as `unknown` and validate with schemas like Zod.
+3. **Constrain generics** with `extends` to keep utility functions focused and type-checked.
+4. **Leverage utility types** (`Pick`, `Omit`, `Partial`, `Record`) rather than duplicating interface definitions.

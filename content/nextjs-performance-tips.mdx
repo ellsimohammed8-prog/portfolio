@@ -2,55 +2,268 @@
 title: "10 Next.js Performance Tips for Production Apps"
 publishedAt: "2024-12-05"
 updatedAt: "2024-12-05"
-author: "John Doe"
-summary: "Practical optimization techniques to make your Next.js applications blazing fast in production."
+author: "Mohammed Guejjim"
+summary: "Essential performance engineering techniques for Next.js App Router applications: Server Components, dynamic imports, font optimization, route caching, parallel data fetching, bundle analysis, and Core Web Vitals."
 image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=192&fit=crop"
 ---
 
-Performance isn't optional—it's a feature. Here are battle-tested tips for optimizing Next.js apps.
+# 10 Next.js Performance Tips for Production Apps
 
-# 2. Optimize Images
+Performance in modern web applications isn't merely an optimization detail—it directly impacts conversion rates, search rankings, and user retention. With Next.js and the App Router, developers have access to sophisticated streaming architectures, server components, and multi-tier caching primitives.
 
-Always use `next/image`
+Here are 10 production-tested techniques to ensure your Next.js applications achieve top-tier Core Web Vitals scores.
 
-```tsx
-import Image from 'next/image';
+---
 
-export function Hero() {
+## 1. Leverage React Server Components (RSC) by Default
+
+By default, all components in the App Router are React Server Components. They execute solely on the server and send zero JavaScript to the browser bundle.
+
+- Reserve `'use client'` strictly for components that require browser APIs (e.g. `window`, `localStorage`), state (`useState`), or event listeners (`onClick`, `onChange`).
+- Push client boundaries as deep down the component tree as possible:
+
+```tsx title="src/components/Header.tsx"
+// This remains a Server Component
+import { ThemeToggle } from "./ThemeToggle"; // 'use client' inside ThemeToggle only
+
+export function Header() {
   return (
-    <Image
-      src="/hero.jpg"
-      alt="Hero image"
-      width={1200}
-      height={600}
-      priority // Load immediately for LCP
-      placeholder="blur"
-      blurDataURL="data:image/jpeg;base64,..."
-    />
+    <header className="flex justify-between p-4 border-b">
+      <h1 className="text-xl font-bold">Portfolio</h1>
+      {/* Only ThemeToggle ships JS to the client */}
+      <ThemeToggle />
+    </header>
   );
 }
 ```
 
+---
 
-## 4. Implement Proper Caching
+## 2. Optimize Media with `next/image`
 
-| Strategy | Use Case | TTL |
-|----------|----------|-----|
-| `force-cache` | Static data | Forever |
-| `revalidate: 3600` | Semi-static | 1 hour |
-| `revalidate: 60` | Frequently updated | 1 minute |
-| `no-store` | Real-time data | Never cache |
+Always use the built-in `next/image` component rather than raw `<img>` tags. It delivers:
+- Automatic WebP and AVIF modern format conversions.
+- Responsive image sizing with `srcset`.
+- Zero Cumulative Layout Shift (CLS) via forced aspect-ratio reservation.
 
-## 5. Minimize Client Components
+```tsx title="src/components/HeroBanner.tsx"
+import Image from "next/image";
 
-Every `'use client'` directive adds to your JavaScript bundle. Keep client components small and focused:
+export function HeroBanner() {
+  return (
+    <div className="relative h-96 w-full overflow-hidden rounded-2xl">
+      <Image
+        src="/banner.jpg"
+        alt="Engineering Project Hero"
+        fill
+        priority // Preloads image to optimize Largest Contentful Paint (LCP)
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover"
+      />
+    </div>
+  );
+}
+```
 
-## 6. Bundle Analysis
+---
+
+## 3. Zero-Layout-Shift Fonts with `next/font`
+
+Loading third-party web fonts often causes unsightly font-swap flickers and worsens CLS. `next/font` automatically downloads font files at build time and self-hosts them alongside your static assets:
+
+```typescript title="src/app/layout.tsx"
+import { Inter, JetBrains_Mono } from "next/font/google";
+
+const sansFont = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
+```
+
+---
+
+## 4. Lazy Load Heavy Client Modules with `next/dynamic`
+
+Heavy third-party libraries (such as Three.js, charting tools, or rich text editors) should never bloat the initial page bundle. Load them dynamically when needed:
+
+```tsx title="src/components/AnalyticsChart.tsx"
+import dynamic from "next/dynamic";
+
+const Dynamic3DCanvas = dynamic(
+  () => import("@/components/ThreeCanvas").then((mod) => mod.ThreeCanvas),
+  {
+    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
+    ssr: false, // Disable server-side rendering for browser-only canvas
+  }
+);
+
+export function InteractiveCard() {
+  return (
+    <div className="card">
+      <Dynamic3DCanvas />
+    </div>
+  );
+}
+```
+
+---
+
+## 5. Parallel Data Fetching to Eliminate Waterfalls
+
+Avoid sequential `await` calls that trigger serial network waterfalls:
+
+```typescript title="Antipattern (Sequential Waterfall)"
+// Bad: Takes Total Time = Profile Time + Projects Time
+const profile = await fetchProfile();
+const projects = await fetchProjects();
+```
+
+```typescript title="Optimized (Parallel Execution)"
+// Good: Executes concurrently
+const [profile, projects] = await Promise.all([
+  fetchProfile(),
+  fetchProjects(),
+]);
+```
+
+---
+
+## 6. Route Segment Caching and Revalidation
+
+Use fine-grained revalidation to balance dynamic freshness with static speed:
+
+```typescript title="src/app/api/telemetry/route.ts"
+// Revalidate every 60 seconds (ISR style)
+export const revalidate = 60;
+
+export async function GET() {
+  const data = await queryTelemetryDatabase();
+  return Response.json(data);
+}
+```
+
+Or on individual `fetch` calls:
+
+```typescript
+const res = await fetch("https://api.example.com/status", {
+  next: { revalidate: 300, tags: ["status-feed"] },
+});
+```
+
+---
+
+## 7. Stream Slow Content with Suspense & React `loading.tsx`
+
+Do not block the entire route while waiting for a slow downstream API. Stream page skeletons immediately while fetching secondary data in the background:
+
+```tsx title="src/app/dashboard/page.tsx"
+import { Suspense } from "react";
+import { MetricsFeed } from "@/components/MetricsFeed";
+import { FeedSkeleton } from "@/components/FeedSkeleton";
+
+export default function Dashboard() {
+  return (
+    <main className="p-8">
+      <h1 className="text-2xl font-bold">System Status</h1>
+      
+      {/* Header renders instantly; metrics stream in as ready */}
+      <Suspense fallback={<FeedSkeleton />}>
+        <MetricsFeed />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+---
+
+## 8. Analyzing Bundles with `@next/bundle-analyzer`
+
+Monitor your client-side dependencies regularly to spot accidental bloat:
 
 ```bash title="terminal"
-# Install analyzer
 npm install @next/bundle-analyzer
+```
 
-# Run analysis
+```javascript title="next.config.mjs"
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+export default withBundleAnalyzer({
+  // regular next config
+});
+```
+
+Run analysis:
+
+```bash
 ANALYZE=true npm run build
+```
+
+---
+
+## 9. Server Action Optimistic Updates
+
+Deliver instant UI feedback before network roundtrips complete using React's `useOptimistic`:
+
+```tsx title="src/components/LikeButton.tsx"
+"use client";
+
+import { useOptimistic, startTransition } from "react";
+import { toggleLikeAction } from "@/app/actions";
+
+export function LikeButton({ initialLikes }: { initialLikes: number }) {
+  const [optimisticLikes, setOptimisticLikes] = useOptimistic(
+    initialLikes,
+    (state, delta: number) => state + delta
+  );
+
+  return (
+    <button
+      onClick={() => {
+        startTransition(async () => {
+          setOptimisticLikes(1);
+          await toggleLikeAction();
+        });
+      }}
+    >
+      ❤️ {optimisticLikes}
+    </button>
+  );
+}
+```
+
+---
+
+## 10. Monitoring Real Core Web Vitals in Production
+
+Audit your site against the three Core Web Vitals metrics:
+
+| Metric | Target | Focus Area |
+| :--- | :--- | :--- |
+| **Largest Contentful Paint (LCP)** | < 2.5s | Image priority, server response time, critical CSS |
+| **Interaction to Next Paint (INP)** | < 200ms | Reduce long JS execution on main thread, Web Workers |
+| **Cumulative Layout Shift (CLS)** | < 0.1 | Explicit image dimensions, font swapping, aspect-ratio |
+
+Track metrics in code using Next.js reporting:
+
+```typescript title="src/app/reportWebVitals.ts"
+import { useReportWebVitals } from "next/web-vitals";
+
+export function WebVitalsMonitor() {
+  useReportWebVitals((metric) => {
+    console.log(metric);
+  });
+  return null;
+}
 ```
