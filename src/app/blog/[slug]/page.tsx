@@ -3,7 +3,8 @@ import { formatDate } from "@/lib/utils";
 import { DATA } from "@/data/resume";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MDXContent } from "@content-collections/mdx/react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { mdxComponents } from "@/mdx-components";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -163,7 +164,9 @@ export default async function Blog({
         />
       </div>
       <article className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-        <MDXContent code={post.mdx} components={mdxComponents} />
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdxComponents as any}>
+          {post.content}
+        </ReactMarkdown>
       </article>
 
       <nav className="mt-12 pt-8 max-w-2xl">
