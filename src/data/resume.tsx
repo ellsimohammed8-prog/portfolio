@@ -1,13 +1,5 @@
 import { Icons } from "@/components/icons";
 import { HomeIcon, NotebookIcon } from "lucide-react";
-import { ReactLight } from "@/components/ui/svgs/reactLight";
-import { NextjsIconDark } from "@/components/ui/svgs/nextjsIconDark";
-import { Typescript } from "@/components/ui/svgs/typescript";
-import { Nodejs } from "@/components/ui/svgs/nodejs";
-import { Python } from "@/components/ui/svgs/python";
-import { Postgresql } from "@/components/ui/svgs/postgresql";
-import { Docker } from "@/components/ui/svgs/docker";
-import { Csharp } from "@/components/ui/svgs/csharp";
 
 export type Skill = {
   name: string;
@@ -37,23 +29,21 @@ export const DATA = {
   location: "Morocco",
   locationLink: "https://www.google.com/maps/place/Morocco",
   description:
-    "Full-Stack AI Engineer & Automation Architect.",
+    "AI Automation Specialist | AI-Assisted Builder.",
   summary:
-    "Specialized in building intelligent ecosystems, multimodal AI workstations, and scalable automation workflows. Experienced in developing real-time AI copilots, autonomous multi-agent orchestration, and bridging IoT telemetry with modern cloud web applications.",
+    "I design and deliver automation systems that remove manual work - follow-up, onboarding, CRM and reporting - with a human approving before anything is sent, never auto-send. I build by directing AI tools: I specify, verify and deliver working systems. I do not claim hand-coded mastery of programming languages or frameworks. Licence Professionnelle in Biotechnologie Agroalimentaire et Qualité.",
   avatarUrl: "/me.png",
   skills: [
-    { name: "Python", icon: Python },
-    { name: "FastAPI" },
-    { name: "AI Agent Orchestration" },
-    { name: "n8n & Automations" },
-    { name: "React", icon: ReactLight },
-    { name: "Next.js", icon: NextjsIconDark },
-    { name: "TypeScript", icon: Typescript },
-    { name: "Node.js", icon: Nodejs },
-    { name: "PostgreSQL & Supabase", icon: Postgresql },
-    { name: "Docker", icon: Docker },
-    { name: "Computer Vision" },
-    { name: "IoT & Embedded Systems", icon: Csharp },
+    { name: "Make (Level 4)" },
+    { name: "n8n" },
+    { name: "Zapier" },
+    { name: "Workflow Automation" },
+    { name: "AI Agent Orchestration (directed)" },
+    { name: "CRM Automation" },
+    { name: "Google Workspace" },
+    { name: "AI-Assisted Web Apps" },
+    { name: "Prompt Engineering" },
+    { name: "Quality & Process Documentation" },
   ] as Skill[],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -90,24 +80,24 @@ export const DATA = {
       href: "https://github.com/ellsimohammed8-prog",
       badges: [],
       location: "Remote",
-      title: "Full-Stack AI Engineer & Automation Architect",
+      title: "AI Automation Specialist",
       logoUrl: "/me.png",
-      start: "2022",
+      start: "2025",
       end: "Present",
       description:
-        "Architecting end-to-end intelligent AI applications, real-time meeting/interview copilots, and multi-agent automation systems. Designing autonomous workflows with n8n and LLMs (Claude, Gemini), and building high-performance web platforms with Next.js, FastAPI, and Supabase.",
+        "Designing and delivering automation systems with Make, n8n and Zapier: post-call follow-up, lead generation and outreach, CRM and reporting, always with human approval before anything is sent. Systems are built by directing AI tools, specified and verified before delivery.",
     },
     {
       company: "Al Karama & Agro-Industries",
       href: "https://estfbs.usms.ac.ma/",
       badges: [],
       location: "Beni Mellal, Morocco",
-      title: "Quality & Process Automation Specialist",
+      title: "Quality Intern - Final-Year Project (PFE)",
       logoUrl: "https://images.seeklogo.com/logo-png/42/1/usms-logo-png_seeklogo-424332.png",
-      start: "2024",
+      start: "2026",
       end: "2026",
       description:
-        "Applied quality engineering, formulation control, hazard analysis (HACCP), and introduced digital tracking & smart process automation for food and bioprocess production lines.",
+        "Final-year internship (June 2026): production process follow-up, formulation and quality control of Harissa, and hazard-analysis tables (HACCP). Earlier, in May 2026, an agricultural valorisation internship focused on packaging and valorisation of agricultural products.",
     },
   ],
   education: [
@@ -122,18 +112,67 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "Meeting-to-Deal",
+      href: "https://github.com/ellsimohammed8-prog",
+      dates: "2025 - Present",
+      active: true,
+      description:
+        "Agency post-call system in Make: call summary, CRM sheet row, and a follow-up draft prepared for human approval. Nothing is ever auto-sent. Built by directing AI tools.",
+      technologies: [
+        "Make",
+        "Google Sheets",
+        "Gmail Drafts",
+        "Human Approval",
+      ],
+      image: "/meeting-to-deal.jpg",
+    },
+    {
+      title: "Auto Website Generator + Outreach",
+      href: "https://github.com/ellsimohammed8-prog",
+      dates: "2025 - Present",
+      active: true,
+      description:
+        "n8n system: lead discovery, AI-assisted website generation, deployment, and outreach emails prepared as drafts for human approval. Flagship automation project, built by directing AI tools.",
+      technologies: [
+        "n8n",
+        "Make",
+        "Google Sheets",
+        "Human Approval",
+      ],
+      image: "/auto-website-generator.jpg",
+    },
+    {
+      title: "MapMyCode",
+      href: "https://github.com/ellsimohammed8-prog/MapMyCode",
+      dates: "2025 - Present",
+      active: true,
+      description:
+        "Interactive code map for ordinary people: for each file, plain language - what it is, its role, and what happens if you change it. Fork of Understand-Anything, transformed for non-programmers.",
+      technologies: [
+        "AI-Assisted Build",
+        "Open Source Fork",
+        "Plain Language",
+      ],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/MapMyCode",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/mapmycode.jpg",
+    },
+    {
       title: "NovaPilot AI",
       href: "https://github.com/ellsimohammed8-prog/novapilot-ai",
       dates: "2024 - Present",
       active: true,
       description:
-        "The Stealth Real-Time Meeting & Interview Copilot. Built with DirectX low-latency overlay, real-time voice streaming using Whisper, and automated situational intelligence powered by Gemini models.",
+        "Meeting assistant for Windows: real-time audio transcription and meeting summaries. Built by directing AI tools, with human review of outputs. Meeting recording and transcription only.",
       technologies: [
-        "DirectX",
         "Whisper",
         "Gemini",
-        "FastAPI",
-        "Python",
+        "AI-Assisted Build",
       ],
       links: [
         {
@@ -150,7 +189,7 @@ export const DATA = {
       dates: "2024 - Present",
       active: true,
       description:
-        "Central AI Operations & Autonomous Agent Platform. Centralizes prompt engineering, automation nodes, telemetry monitoring, and multi-model dispatching into a sleek glassmorphic interface.",
+        "AI-assisted sales automation system: follow-up, pipeline tracking and reporting, built by directing AI tools and verified before delivery.",
       technologies: [
         "Next.js 15",
         "FastAPI",
@@ -173,7 +212,7 @@ export const DATA = {
       dates: "2024",
       active: true,
       description:
-        "Multimodal AI Diagnostic Workstation. Integrates laboratory sensor telemetry, computer vision analysis, and diagnostic monitoring into a unified real-time clinical workstation.",
+        "Showcase concept: a diagnostic workstation concept integrating sensor data and analysis dashboards. Concept demo, not a clinical product.",
       technologies: [
         "Computer Vision",
         "FastAPI",
