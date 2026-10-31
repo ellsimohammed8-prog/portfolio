@@ -25,11 +25,11 @@ export type Project = {
 export const DATA = {
   name: "Mohammed Guejjim",
   initials: "MG",
-  url: "https://github.com/ellsimohammed8-prog",
+  url: "https://portfolio.ellsimohammed8.workers.dev",
   location: "Morocco",
   locationLink: "https://www.google.com/maps/place/Morocco",
   description:
-    "AI Automation Specialist | AI-Assisted Builder.",
+    "AI Automation Specialist | AI-Assisted Builder. I help agencies and small businesses stop losing clients to slow follow-up, with Make, n8n and Zapier systems, always with human approval before anything is sent.",
   summary:
     "I design and deliver automation systems that remove manual work - follow-up, onboarding, CRM and reporting - with a human approving before anything is sent, never auto-send. I build by directing AI tools: I specify, verify and deliver working systems. I do not claim hand-coded mastery of programming languages or frameworks. Licence Professionnelle in Biotechnologie Agroalimentaire et Qualité.",
   avatarUrl: "/me.png",

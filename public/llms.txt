@@ -1,0 +1,34 @@
+# Mohammed Guejjim
+
+> Mohammed Guejjim is an AI Automation Specialist and AI-assisted builder based in Morocco, working remotely with agencies and small businesses.
+
+## Who he is
+
+- Name: Mohammed Guejjim
+- Role: AI Automation Specialist | AI-Assisted Builder
+- Location: Morocco, working remotely
+- Education: Licence Professionnelle in Biotechnologie Agroalimentaire et Qualite, EST Fquih Ben Salah, Universite Sultan Moulay Slimane (2023-2026)
+- Certifications: Make Level 4, n8n Professional, Zapier Building AI Agents
+- Website: https://portfolio.ellsimohammed8.workers.dev/
+- GitHub: https://github.com/ellsimohammed8-prog
+- LinkedIn: https://www.linkedin.com/in/mohammed-guejjim-07b797290
+
+## What he does
+
+- He designs and delivers automation systems that remove manual work: lead follow-up, partner and client onboarding, CRM updates, and reporting.
+- He works with the tools clients already use: Make, n8n, and Zapier, plus Google Workspace.
+- A human approves before anything is sent. Nothing is ever auto-sent.
+- He builds by directing AI tools: he specifies, verifies, and delivers working systems. He does not claim hand-coded mastery of programming languages or frameworks.
+
+## Proof: systems he built
+
+- Meeting-to-Deal: an agency post-call system in Make. A call becomes a summary, a CRM sheet row, and a follow-up draft prepared for human approval. Nothing is auto-sent.
+- Auto Website Generator + Outreach: an n8n system that finds leads, builds a website draft, and prepares an outreach email as a draft for human approval.
+- MapMyCode: an open-source fork that turns a codebase into a plain-language map for ordinary people, explaining what each file is, its role, and what happens if it is changed. https://github.com/ellsimohammed8-prog/MapMyCode
+- NovaPilot AI: a meeting assistant for Windows that records and transcribes meetings and produces summaries. Meeting recording and transcription only.
+- Cockpit IA: a sales automation concept demo, not a client product.
+
+## How to contact him
+
+- Use the contact links on https://portfolio.ellsimohammed8.workers.dev/ , GitHub, or LinkedIn.
+- This page is a summary for search engines and AI assistants. The website itself is the authoritative source.
