@@ -334,6 +334,317 @@ export const DATA = {
       ],
       image: "/ovomatrix.jpg",
     },
+    {
+      title: "Automation Services",
+      href: "https://ellsimohammed8-prog.github.io/automation-services/",
+      dates: "2026",
+      active: true,
+      description:
+        "My automation services site: Make, n8n and Zapier workflows, AI chatbots and automation for agencies and small businesses, with human approval before anything is sent.",
+      technologies: [
+        "Make",
+        "n8n",
+        "Zapier",
+        "Workflow Automation",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/automation-services/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/automation-services",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Cockpit IA Showcase",
+      href: "https://ellsimohammed8-prog.github.io/cockpit-ia-showcase/",
+      dates: "2026",
+      active: true,
+      description:
+        "Showcase site for Cockpit IA: email-to-quote sales automation, RFQs in and validated quotes out. A concept demo, not a client product.",
+      technologies: [
+        "Sales Automation",
+        "AI Automation",
+        "CRM",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/cockpit-ia-showcase/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/cockpit-ia-showcase",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Nour Rooftop Concept",
+      href: "https://ellsimohammed8-prog.github.io/nour-rooftop-concept/",
+      dates: "2026",
+      active: true,
+      description:
+        "Luxury rooftop restaurant concept demo with fictional business content. A design concept, not a real restaurant.",
+      technologies: [
+        "UI/UX",
+        "Responsive Design",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/nour-rooftop-concept/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/nour-rooftop-concept",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Marjana Concept",
+      href: "https://ellsimohammed8-prog.github.io/marjana-concept/",
+      dates: "2026",
+      active: true,
+      description:
+        "Concept homepage for a rooftop restaurant in Marrakech, built as a sales demo. A concept demo, not a live client site.",
+      technologies: [
+        "UI/UX",
+        "Responsive Design",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/marjana-concept/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/marjana-concept",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Visio Clara Concept",
+      href: "https://ellsimohammed8-prog.github.io/visio-clara-concept/",
+      dates: "2026",
+      active: true,
+      description:
+        "Cinematic AI-video concept tribute with a scroll-driven nebula-to-iris experience. A concept demo.",
+      technologies: [
+        "UI/UX",
+        "Animation",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/visio-clara-concept/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/visio-clara-concept",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "ClearQuote Insurance",
+      href: "https://ellsimohammed8-prog.github.io/clearquote-insurance/",
+      dates: "2026",
+      active: true,
+      description:
+        "Insurance comparison concept demo with a quote widget. A concept demo, not a real insurance broker.",
+      technologies: [
+        "UI/UX",
+        "Comparison Website",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/clearquote-insurance/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/clearquote-insurance",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "NOVA Summit",
+      href: "https://ellsimohammed8-prog.github.io/nova-summit/",
+      dates: "2026",
+      active: true,
+      description:
+        "Minimal single-page event landing page concept demo. Lightweight, fast and focused on one event.",
+      technologies: [
+        "Landing Page",
+        "HTML/CSS",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/nova-summit/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/nova-summit",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "AquaShine Mobile Wash",
+      href: "https://ellsimohammed8-prog.github.io/aquashine-mobile-wash/",
+      dates: "2026",
+      active: true,
+      description:
+        "Premium mobile car wash concept demo website with AI-generated visuals and video. A concept demo.",
+      technologies: [
+        "UI/UX",
+        "Service Website",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/aquashine-mobile-wash/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/aquashine-mobile-wash",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Aura Dental Studio",
+      href: "https://ellsimohammed8-prog.github.io/aura-dental-studio/",
+      dates: "2026",
+      active: true,
+      description:
+        "Premium esthetic dentistry website template. A template demo, not a real clinic.",
+      technologies: [
+        "Clinic Website",
+        "Template",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/aura-dental-studio/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/aura-dental-studio",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Vitalis Clinic",
+      href: "https://ellsimohammed8-prog.github.io/vitalis-clinic/",
+      dates: "2026",
+      active: true,
+      description:
+        "Clean medical website template. A template demo, not a real clinic.",
+      technologies: [
+        "Clinic Website",
+        "Template",
+        "GitHub Pages",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://ellsimohammed8-prog.github.io/vitalis-clinic/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/vitalis-clinic",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "J.A.R.V.I.S. AI for Windows",
+      href: "https://github.com/ellsimohammed8-prog/jarvis",
+      dates: "2026",
+      active: true,
+      description:
+        "Desktop and voice assistant for Windows in Moroccan Darija and English, with PC control. Built by directing AI tools.",
+      technologies: [
+        "Voice Assistant",
+        "Desktop Assistant",
+        "Python",
+      ],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/jarvis",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "Food Additif",
+      href: "https://github.com/ellsimohammed8-prog/food-additif",
+      dates: "2026",
+      active: true,
+      description:
+        "Bilingual Arabic and English Progressive Web App to search, filter and inspect food additives, for food safety awareness.",
+      technologies: [
+        "PWA",
+        "Food Safety",
+        "JavaScript",
+      ],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/food-additif",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
+    {
+      title: "AMDM Digital Fortress Showcase",
+      href: "https://github.com/ellsimohammed8-prog/AMDM-Digital-Fortress-Showcase",
+      dates: "2026",
+      active: true,
+      description:
+        "Showcase site for a digital platform for social impact and association management. The core codebase is a private client asset; this is the public showcase only.",
+      technologies: [
+        "Association Management",
+        "Dashboard",
+        "Showcase",
+      ],
+      links: [
+        {
+          type: "Source",
+          href: "https://github.com/ellsimohammed8-prog/AMDM-Digital-Fortress-Showcase",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+    },
   ] as Project[],
   hackathons: [
     {
