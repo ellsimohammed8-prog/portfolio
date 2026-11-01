@@ -441,6 +441,7 @@ export const DATA = {
     },
     {
       title: "Visio Clara Concept",
+      image: "/visio-clara.jpg",
       href: "https://ellsimohammed8-prog.github.io/visio-clara-concept/",
       dates: "2026",
       active: true,
@@ -466,6 +467,7 @@ export const DATA = {
     },
     {
       title: "ClearQuote Insurance",
+      image: "/clearquote.jpg",
       href: "https://ellsimohammed8-prog.github.io/clearquote-insurance/",
       dates: "2026",
       active: true,
@@ -491,6 +493,7 @@ export const DATA = {
     },
     {
       title: "NOVA Summit",
+      image: "/nova-summit.jpg",
       href: "https://ellsimohammed8-prog.github.io/nova-summit/",
       dates: "2026",
       active: true,
@@ -516,6 +519,7 @@ export const DATA = {
     },
     {
       title: "AquaShine Mobile Wash",
+      image: "/aquashine.jpg",
       href: "https://ellsimohammed8-prog.github.io/aquashine-mobile-wash/",
       dates: "2026",
       active: true,
