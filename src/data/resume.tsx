@@ -336,6 +336,7 @@ export const DATA = {
     },
     {
       title: "Automation Services",
+      image: "/automation-services.jpg",
       href: "https://ellsimohammed8-prog.github.io/automation-services/",
       dates: "2026",
       active: true,
@@ -362,6 +363,7 @@ export const DATA = {
     },
     {
       title: "Cockpit IA Showcase",
+      image: "/cockpit-ia-showcase.jpg",
       href: "https://ellsimohammed8-prog.github.io/cockpit-ia-showcase/",
       dates: "2026",
       active: true,
@@ -387,6 +389,7 @@ export const DATA = {
     },
     {
       title: "Nour Rooftop Concept",
+      image: "/nour-rooftop.jpg",
       href: "https://ellsimohammed8-prog.github.io/nour-rooftop-concept/",
       dates: "2026",
       active: true,
@@ -412,6 +415,7 @@ export const DATA = {
     },
     {
       title: "Marjana Concept",
+      image: "/marjana.jpg",
       href: "https://ellsimohammed8-prog.github.io/marjana-concept/",
       dates: "2026",
       active: true,
