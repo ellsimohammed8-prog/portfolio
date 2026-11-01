@@ -545,6 +545,7 @@ export const DATA = {
     },
     {
       title: "Aura Dental Studio",
+      image: "/aura-dental.jpg",
       href: "https://ellsimohammed8-prog.github.io/aura-dental-studio/",
       dates: "2026",
       active: true,
@@ -570,6 +571,7 @@ export const DATA = {
     },
     {
       title: "Vitalis Clinic",
+      image: "/vitalis.jpg",
       href: "https://ellsimohammed8-prog.github.io/vitalis-clinic/",
       dates: "2026",
       active: true,
@@ -595,6 +597,7 @@ export const DATA = {
     },
     {
       title: "J.A.R.V.I.S. AI for Windows",
+      image: "/jarvis.jpg",
       href: "https://github.com/ellsimohammed8-prog/jarvis",
       dates: "2026",
       active: true,
@@ -615,6 +618,7 @@ export const DATA = {
     },
     {
       title: "Food Additif",
+      image: "/food-additif.jpg",
       href: "https://github.com/ellsimohammed8-prog/food-additif",
       dates: "2026",
       active: true,
