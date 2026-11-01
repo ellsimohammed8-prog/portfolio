@@ -639,6 +639,7 @@ export const DATA = {
     },
     {
       title: "AMDM Digital Fortress Showcase",
+      image: "/amdm.jpg",
       href: "https://github.com/ellsimohammed8-prog/AMDM-Digital-Fortress-Showcase",
       dates: "2026",
       active: true,
