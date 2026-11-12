@@ -163,27 +163,6 @@ export const DATA = {
       image: "/mapmycode.jpg",
     },
     {
-      title: "NovaPilot AI",
-      href: "https://github.com/ellsimohammed8-prog/novapilot-ai",
-      dates: "2024 - Present",
-      active: true,
-      description:
-        "Meeting assistant for Windows: real-time audio transcription and meeting summaries. Built by directing AI tools, with human review of outputs. Meeting recording and transcription only.",
-      technologies: [
-        "Whisper",
-        "Gemini",
-        "AI-Assisted Build",
-      ],
-      links: [
-        {
-          type: "Source",
-          href: "https://github.com/ellsimohammed8-prog/novapilot-ai",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "/novapilot.jpg",
-    },
-    {
       title: "Cockpit-IA",
       href: "https://github.com/ellsimohammed8-prog/Cockpit-IA",
       dates: "2024 - Present",

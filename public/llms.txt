@@ -25,7 +25,6 @@
 - Meeting-to-Deal: an agency post-call system in Make. A call becomes a summary, a CRM sheet row, and a follow-up draft prepared for human approval. Nothing is auto-sent.
 - Auto Website Generator + Outreach: an n8n system that finds leads, builds a website draft, and prepares an outreach email as a draft for human approval.
 - MapMyCode: an open-source fork that turns a codebase into a plain-language map for ordinary people, explaining what each file is, its role, and what happens if it is changed. https://github.com/ellsimohammed8-prog/MapMyCode
-- NovaPilot AI: a meeting assistant for Windows that records and transcribes meetings and produces summaries. Meeting recording and transcription only.
 - Cockpit IA: a sales automation concept demo, not a client product.
 
 ## How to contact him

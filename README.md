@@ -25,12 +25,11 @@ A modern, high-performance personal portfolio built with **Next.js 16**, **React
 
 ## 📂 Key Projects Featured
 
-1. **NovaPilot AI** - Stealth Real-Time Meeting & Interview Copilot (DirectX, Whisper, Gemini, FastAPI)
-2. **Cockpit-IA** - Central AI Operations & Multi-Agent Platform (Next.js 15, FastAPI, Supabase, n8n)
-3. **MG Diagnostics System (MGDS)** - Multimodal AI Diagnostic Workstation (Computer Vision, FastAPI, Sensors)
-4. **LuxeMode** - Luxury Fashion E-Commerce Platform inspired by Zara (Next.js 15, Tailwind CSS, Netlify)
-5. **Mystic Studio** - Premium 3D Credit Card Skins Customizer (React, Three.js, Vite, Netlify)
-6. **Luxury Restaurant Showcase** - Fine Dining & Table Reservation Platform (JavaScript, UI/UX, GitHub Pages)
+1. **Cockpit-IA** - Central AI Operations & Multi-Agent Platform (Next.js 15, FastAPI, Supabase, n8n)
+2. **MG Diagnostics System (MGDS)** - Multimodal AI Diagnostic Workstation (Computer Vision, FastAPI, Sensors)
+3. **LuxeMode** - Luxury Fashion E-Commerce Platform inspired by Zara (Next.js 15, Tailwind CSS, Netlify)
+4. **Mystic Studio** - Premium 3D Credit Card Skins Customizer (React, Three.js, Vite, Netlify)
+5. **Luxury Restaurant Showcase** - Fine Dining & Table Reservation Platform (JavaScript, UI/UX, GitHub Pages)
 7. **OvoMatrix IoT System** - Smart Poultry Farm Telemetry & Automation Ecosystem (IoT, C++, Python)
 
 ---
